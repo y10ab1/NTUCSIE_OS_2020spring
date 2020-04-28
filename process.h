@@ -24,7 +24,7 @@ typedef struct process
 } PROCESS;
 /*gettime*/
 
-void gettime(long *sec, long *nsec);
+//void gettime(long *sec, long *nsec);
 void policy_SJF_PSJF(int policy, int nproc, PROCESS *proc, int *ret);
 void policy_RR(int policy, int nproc, PROCESS *proc, int *ret);
 void policy_FIFO(int policy, int nproc, PROCESS *proc, int *ret);

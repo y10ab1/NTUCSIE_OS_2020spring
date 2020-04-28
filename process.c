@@ -10,9 +10,7 @@
 #include <sys/time.h>
 #include <time.h>
 
-#define GET_TIME 314
-#define PRINTK 315
-
+/*
 void gettime(long *sec, long *nsec)
 {
 	struct timeval tv;
@@ -23,7 +21,7 @@ void gettime(long *sec, long *nsec)
 	*nsec = tv.tv_usec * 1000 + (tv.tv_usec / 100 + 37) % 1000;
 	//printf("%ld.%ld\n", sec, nsec);
 }
-
+*/
 int proc_assign_cpu(int pid, int core)
 {
 #ifdef DEBUG
