@@ -84,6 +84,7 @@ int proc_exec( PROCESS proc)
 		//memset(to_dmesg, '\0', 35);
 		//printf("%s",to_dmesg);
 		//fflush(stdout);
+		
 		syscall(335, to_dmesg);
 		exit(0);
 	}
