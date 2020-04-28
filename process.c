@@ -59,8 +59,9 @@ int proc_exec( PROCESS proc)
 	if (pid == 0)
 	{
 		long start_sec, start_nsec, end_sec, end_nsec;
-
+		struct timespec t1,t2;
 		gettime(&start_sec, &start_nsec);
+		syscall(334,&t1);
 		//syscall(GET_TIME, &start_sec, &start_nsec);
 		for (int i = 0; i < proc.t_exec; i++)
 		{
@@ -72,16 +73,18 @@ int proc_exec( PROCESS proc)
 		}
 		char to_dmesg[200];
 		gettime(&end_sec, &end_nsec);
+		syscall(334,&t2);
 		//printf("hi\n");
 		//syscall(GET_TIME, &end_sec, &end_nsec);
-		sprintf(to_dmesg, "[project1] %d %lu.%09lu %lu.%09lu\n", getpid(), start_sec, start_nsec, end_sec, end_nsec);
+		//sprintf(to_dmesg, "[project1] %d %lu.%09lu %lu.%09lu\n", getpid(), start_sec, start_nsec, end_sec, end_nsec);
+		sprintf(to_dmesg, "[project1] %d %lu.%09lu %lu.%09lu\n", getpid(), t1.tv_sec, t1.tv_nsec, t2.tv_sec, t2.tv_nsec);
 		
 		
 		//printf("%shi\n", *to_dmesg[proc.name[1] - '0' - 1]);
 		//memset(to_dmesg, '\0', 35);
 		//printf("%s",to_dmesg);
 		//fflush(stdout);
-		syscall(334, to_dmesg);
+		syscall(335, to_dmesg);
 		exit(0);
 	}
 
