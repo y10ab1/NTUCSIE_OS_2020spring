@@ -12,8 +12,14 @@ dmesg -C
 for i in TIME_MEASUREMENT FIFO_1 PSJF_2 RR_3 SJF_4;
 do
 	echo Demoing $i ...
+	echo ""
 	../main < $in_folder/$i.txt
-	echo Deleting previous dmesg $i ...
-	dmesg -c | grep Project1
+	echo ""
+	echo Deleting previous dmesg ...
+	echo ""
+	echo show $i dmesg ...
+	dmesg -c | grep project1
 	echo ""
 done
+	echo done! 
+
