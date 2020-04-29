@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "mesg.h": "c",
-        "unistd.h": "c"
-    }
-}
