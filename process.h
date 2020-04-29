@@ -24,10 +24,7 @@ typedef struct process
 } PROCESS;
 
 
-/*policy implement*/
-void policy_SJF_PSJF(int policy, int nproc, PROCESS *proc, int *ret);
-void policy_RR(int policy, int nproc, PROCESS *proc, int *ret);
-void policy_FIFO(int policy, int nproc, PROCESS *proc, int *ret);
+
 
 /* Assign process to specific core */
 int CPU_assign(int pid, int core);

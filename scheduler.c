@@ -8,17 +8,7 @@
 #include <sys/wait.h>
 #include <sched.h>
 
-/* Last context switch time for RR scheduling */
-static int t_last;
 
-/* Current unit time */
-static int ntime;
-
-/* Index of running process. -1 if no process running */
-static int running;
-
-/* Number of finish Process */
-static int finish_cnt;
 
 /* Sort processes by ready time */
 int cmp(const void *a, const void *b)
@@ -35,19 +25,23 @@ int next_process(PROCESS *proc, int nproc, int policy)
 
 	int ret = -1;
 
-	if (policy == P_PSJF || policy == P_SJF)
+	switch (policy)
 	{
+	case P_PSJF:
 		policy_SJF_PSJF(policy, nproc, proc, &ret);
-	}
-
-	else if (policy == P_FIFO)
-	{
+		break;
+	case P_SJF:
+		policy_SJF_PSJF(policy, nproc, proc, &ret);
+		break;
+	case P_FIFO:
 		policy_FIFO(policy, nproc, proc, &ret);
-	}
-
-	else if (policy == P_RR)
-	{
+		break;
+	case P_RR:
 		policy_RR(policy, nproc, proc, &ret);
+		break;
+
+	default:
+		break;
 	}
 
 	return ret;
@@ -69,43 +63,43 @@ int scheduling(PROCESS *proc, int nproc, int policy)
 	Wake_process(this_pid);
 
 	/* Initial scheduler */
-	finish_cnt = 0;
-	ntime = 0;
+	finish_count = 0;
+	now_time = 0;
 	running = -1;
 
 	while (1)
 	{
-		//fprintf(stderr, "Current time: %d\n", ntime);
+		//fprintf(stderr, "Current time: %d\n", now_time);
 
 		/* Check if running process finish */
 		if (running != -1 && proc[running].t_exec == 0)
 		{
 
 #ifdef DEBUG
-			fprintf(stderr, "%s finish at time %d.\n", proc[running].name, ntime);
+			fprintf(stderr, "%s finish at time %d.\n", proc[running].name, now_time);
 #endif
 
 			waitpid(proc[running].pid, NULL, 0);
 			printf("%s %d\n", proc[running].name, proc[running].pid);
 			running = -1;
-			finish_cnt++;
+			finish_count++;
 
 			/* All process finish */
-			if (finish_cnt == nproc)
+			if (finish_count == nproc)
 				break;
 		}
 
 		/* Check if process ready and execute */
 		for (int i = 0; i < nproc; i++)
 		{
-			if (proc[i].t_ready == ntime)
+			if (proc[i].t_ready == now_time)
 			{
 
 				proc[i].pid = Execute_process(proc[i]);
 
 				Block_process(proc[i].pid);
 #ifdef DEBUG
-				fprintf(stderr, "%s ready at time %d.\n", proc[i].name, ntime);
+				fprintf(stderr, "%s ready at time %d.\n", proc[i].name, now_time);
 #endif
 			}
 		}
@@ -120,7 +114,7 @@ int scheduling(PROCESS *proc, int nproc, int policy)
 				Wake_process(proc[next].pid);
 				Block_process(proc[running].pid);
 				running = next;
-				t_last = ntime;
+				t_last = now_time;
 			}
 		}
 
@@ -128,7 +122,7 @@ int scheduling(PROCESS *proc, int nproc, int policy)
 		TIME_UNIT();
 		if (running != -1)
 			proc[running].t_exec--;
-		ntime++;
+		now_time++;
 	}
 
 	return 0;
@@ -160,7 +154,7 @@ void policy_RR(int policy, int nproc, PROCESS *proc, int *ret)
 			}
 		}
 	}
-	else if ((ntime - t_last) % 500 == 0)
+	else if ((now_time - t_last) % 500 == 0)
 	{
 		*ret = (running + 1) % nproc;
 		while (proc[*ret].pid == -1 || proc[*ret].t_exec == 0)
