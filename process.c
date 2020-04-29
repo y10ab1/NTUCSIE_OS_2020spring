@@ -10,19 +10,8 @@
 #include <sys/time.h>
 #include <time.h>
 
-/*
-void gettime(long *sec, long *nsec)
-{
-	struct timeval tv;
 
-	gettimeofday(&tv, NULL);
-	//long sec, nsec;
-	*sec = tv.tv_sec;
-	*nsec = tv.tv_usec * 1000 + (tv.tv_usec / 100 + 37) % 1000;
-	//printf("%ld.%ld\n", sec, nsec);
-}
-*/
-int proc_assign_cpu(int pid, int core)
+int CPU_assign(int pid, int core)
 {
 #ifdef DEBUG
 	if (core > sizeof(cpu_set_t))
@@ -44,7 +33,7 @@ int proc_assign_cpu(int pid, int core)
 	return 0;
 }
 
-int proc_exec( PROCESS proc)
+int Execute_process(PROCESS proc)
 {
 	int pid = fork();
 
@@ -57,43 +46,35 @@ int proc_exec( PROCESS proc)
 	if (pid == 0)
 	{
 		//long start_sec, start_nsec, end_sec, end_nsec;
-		struct timespec t1,t2;
+		struct timespec t1, t2;
 		//gettime(&start_sec, &start_nsec);
-		syscall(334,&t1);
+		syscall(334, &t1);
 		//syscall(GET_TIME, &start_sec, &start_nsec);
 		for (int i = 0; i < proc.t_exec; i++)
 		{
-			UNIT_T();
+			TIME_UNIT();
 #ifdef DEBUG
 			if (i % 100 == 0)
 				fprintf(stderr, "%s: %d/%d\n", proc.name, i, proc.t_exec);
 #endif
 		}
-		char to_dmesg[200];
+		char dmesg[200];
 		//gettime(&end_sec, &end_nsec);
-		syscall(334,&t2);
-		//printf("hi\n");
-		//syscall(GET_TIME, &end_sec, &end_nsec);
-		//sprintf(to_dmesg, "[project1] %d %lu.%09lu %lu.%09lu\n", getpid(), start_sec, start_nsec, end_sec, end_nsec);
-		sprintf(to_dmesg, "[Project1] %d %lu.%09lu %lu.%09lu\n", getpid(), t1.tv_sec, t1.tv_nsec, t2.tv_sec, t2.tv_nsec);
+		syscall(334, &t2);
 		
-		
-		//printf("%shi\n", *to_dmesg[proc.name[1] - '0' - 1]);
-		//memset(to_dmesg, '\0', 35);
-		//printf("%s",to_dmesg);
-		//fflush(stdout);
-		
-		syscall(335, to_dmesg);
+		sprintf(dmesg, "[Project1] %d %lu.%09lu %lu.%09lu\n", getpid(), t1.tv_sec, t1.tv_nsec, t2.tv_sec, t2.tv_nsec);
+
+		syscall(335, dmesg);
 		exit(0);
 	}
 
 	/* Assign child to another core prevent from interupted by parant */
-	proc_assign_cpu(pid, CHILD_CPU);
+	CPU_assign(pid, CHILD_CPU);
 
 	return pid;
 }
 
-int proc_block(int pid)
+int Block_process(int pid)
 {
 	struct sched_param param;
 
@@ -111,7 +92,7 @@ int proc_block(int pid)
 	return ret;
 }
 
-int proc_wakeup(int pid)
+int Wake_process(int pid)
 {
 	struct sched_param param;
 

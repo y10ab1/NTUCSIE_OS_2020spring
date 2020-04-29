@@ -8,7 +8,7 @@
 #define PARENT_CPU 0
 
 /* Running one unit time */
-#define UNIT_T()                        \
+#define TIME_UNIT()                        \
 	{                                   \
 		volatile unsigned long i;       \
 		for (i = 0; i < 1000000UL; i++) \
@@ -22,23 +22,23 @@ typedef struct process
 	int t_exec;
 	pid_t pid;
 } PROCESS;
-/*gettime*/
 
-//void gettime(long *sec, long *nsec);
+
+/*policy implement*/
 void policy_SJF_PSJF(int policy, int nproc, PROCESS *proc, int *ret);
 void policy_RR(int policy, int nproc, PROCESS *proc, int *ret);
 void policy_FIFO(int policy, int nproc, PROCESS *proc, int *ret);
 
 /* Assign process to specific core */
-int proc_assign_cpu(int pid, int core);
+int CPU_assign(int pid, int core);
 
 /* Exec process and return pid */
-int proc_exec( PROCESS proc);
+int Execute_process( PROCESS proc);
 
 /* Set very low priority tp process */
-int proc_block(int pid);
+int Block_process(int pid);
 
 /* Set high priority to process */
-int proc_wakeup(int pid);
+int Wake_process(int pid);
 
 #endif
