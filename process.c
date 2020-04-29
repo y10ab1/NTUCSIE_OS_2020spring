@@ -56,9 +56,9 @@ int proc_exec( PROCESS proc)
 
 	if (pid == 0)
 	{
-		long start_sec, start_nsec, end_sec, end_nsec;
+		//long start_sec, start_nsec, end_sec, end_nsec;
 		struct timespec t1,t2;
-		gettime(&start_sec, &start_nsec);
+		//gettime(&start_sec, &start_nsec);
 		syscall(334,&t1);
 		//syscall(GET_TIME, &start_sec, &start_nsec);
 		for (int i = 0; i < proc.t_exec; i++)
@@ -70,7 +70,7 @@ int proc_exec( PROCESS proc)
 #endif
 		}
 		char to_dmesg[200];
-		gettime(&end_sec, &end_nsec);
+		//gettime(&end_sec, &end_nsec);
 		syscall(334,&t2);
 		//printf("hi\n");
 		//syscall(GET_TIME, &end_sec, &end_nsec);

@@ -18,7 +18,7 @@ do
 	echo Deleting previous dmesg ...
 	echo ""
 	echo Output $i dmesg ...
-	dmesg -c | grep project1 > ../output/$i"_dmesg.txt"
+	dmesg -c | grep Project1 > ../output/$i"_dmesg.txt"
 	echo ""
 done
 	echo done! 
