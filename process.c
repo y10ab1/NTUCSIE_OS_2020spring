@@ -75,7 +75,7 @@ int proc_exec( PROCESS proc)
 		//printf("hi\n");
 		//syscall(GET_TIME, &end_sec, &end_nsec);
 		//sprintf(to_dmesg, "[project1] %d %lu.%09lu %lu.%09lu\n", getpid(), start_sec, start_nsec, end_sec, end_nsec);
-		sprintf(to_dmesg, "[project1] %d %lu.%09lu %lu.%09lu\n", getpid(), t1.tv_sec, t1.tv_nsec, t2.tv_sec, t2.tv_nsec);
+		sprintf(to_dmesg, "[Project1] %d %lu.%09lu %lu.%09lu\n", getpid(), t1.tv_sec, t1.tv_nsec, t2.tv_sec, t2.tv_nsec);
 		
 		
 		//printf("%shi\n", *to_dmesg[proc.name[1] - '0' - 1]);
