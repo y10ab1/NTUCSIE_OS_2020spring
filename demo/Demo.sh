@@ -18,7 +18,7 @@ do
 	echo Deleting previous dmesg ...
 	echo ""
 	echo show $i dmesg ...
-	dmesg -c | grep project1
+	dmesg -c | grep Project1
 	echo ""
 done
 	echo done! 
