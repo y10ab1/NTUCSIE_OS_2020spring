@@ -49,7 +49,7 @@ int Execute_process(PROCESS proc)
 		struct timespec t1, t2;
 		//gettime(&start_sec, &start_nsec);
 		syscall(334, &t1);
-		//syscall(GET_TIME, &start_sec, &start_nsec);
+		
 		for (int i = 0; i < proc.t_exec; i++)
 		{
 			TIME_UNIT();
